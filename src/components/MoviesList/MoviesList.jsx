@@ -8,7 +8,7 @@ export const MoviesList = ({ movies, page }) => {
     return (
       <ul>
         {movies.map(movie => {
-          if (!movie.original_title) return;
+          // if (!movie.original_title) return;
           return (
             <li key={movie.id}>
               <Link to={`movies/${movie.id}`} state={{ from: location }}>
@@ -24,7 +24,7 @@ export const MoviesList = ({ movies, page }) => {
     return (
       <ul>
         {movies.map(movie => {
-          if (!movie.original_title) return;
+          // if (!movie.original_title) return;
           return (
             <li key={movie.id}>
               <Link to={`${movie.id}`} state={{ from: location }}>
