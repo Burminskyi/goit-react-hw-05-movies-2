@@ -1,16 +1,16 @@
+import { Loader } from 'components/Loader/Loader';
 import { MoviesList } from 'components/MoviesList/MoviesList';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getMoviesByName } from 'services/getMovies';
 
 const Movies = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [movies, setMovies] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const page = 'moviesPage';
-
   useEffect(() => {
+    if (movies.length > 0) setIsLoading(true);
     const query = searchParams.get('query');
     if (!query) return;
 
@@ -20,25 +20,26 @@ const Movies = () => {
         setMovies(data.results);
       } catch (error) {
         console.log(error.message);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchMoviesByQuery();
-  }, [searchParams]);
-
-  const handleSearchQuery = e => {
-    setSearchQuery(e.target.value.toLowerCase().trim());
-  };
+  }, [movies.length, searchParams]);
 
   const handleSubmit = e => {
     e.preventDefault();
+    const query = e.target.query.value.toLowerCase().trim();
 
-    if (searchQuery.trim() === '') {
+    if (!query) {
       alert('Введите запрос');
       return;
     }
 
-    setSearchParams({ query: searchQuery });
+    setSearchParams({ query });
   };
+
+  if (isLoading) return <Loader />;
 
   return (
     <>
@@ -48,16 +49,15 @@ const Movies = () => {
         </button>
 
         <input
+          name="query"
           className=""
           type="text"
           autoComplete="off"
-          //   value={this.state.searchQuery}
-          onChange={handleSearchQuery}
           autoFocus
           placeholder="Search movie"
         />
       </form>
-      {movies && <MoviesList movies={movies} page={page} />}
+      {movies.length > 0 && <MoviesList movies={movies} />}
     </>
   );
 };

@@ -4,7 +4,6 @@ import { getTrendingMovies } from 'services/getMovies';
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
-  const page = 'homePage';
 
   useEffect(() => {
     const updateComponent = async () => {
@@ -21,7 +20,7 @@ const Home = () => {
   return (
     <>
       <h1>Trending today</h1>
-      {movies && <MoviesList movies={movies} page={page} />}
+      {movies && <MoviesList movies={movies}/>}
     </>
   );
 };
